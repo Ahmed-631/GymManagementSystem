@@ -1,0 +1,131 @@
+﻿@using GymManagementDAL.Entities.Enums
+@model CreateTrainerViewModel
+
+<div class="container mt-4">
+    <header class="mb-4">
+        <h3 class="text-primary-color">Add New Trainer</h3>
+    </header>
+
+    <form method="post"  asp-controller="Trainer"  asp-action="CreateTrainer">
+
+        <!-- Trainer Info -->
+        <div class="section-header mb-3">
+            <h5 class="text-primary fw-bold">Personal Information</h5>
+            <hr class="mt-2">
+        </div>
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label  asp-for="Name"  class="form-label">Name</label>
+                <input asp-for="Name" type="text" class="form-control" />
+                <span  class="text-danger"  asp-validation-for="Name" ></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="Email" class="form-label">Email</label>
+                <input asp-for="Email" type="text" class="form-control" />
+                <span class="text-danger" asp-validation-for="Email"></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="Phone" class="form-label">Phone</label>
+                <input asp-for="Phone" type="text" class="form-control" />
+                <span class="text-danger" asp-validation-for="Phone"></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="DateOfBirth" class="form-label">DateOfBirth</label>
+                <input asp-for="DateOfBirth" type="text" class="form-control" />
+                <span class="text-danger" asp-validation-for="DateOfBirth"></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label class="form-label">Gender</label>
+                <select asp-for="Gender" asp-items="@Html.GetEnumSelectList<Gender>()" class="form-select">
+                    <option value="">-- Select Gender --</option>
+                 
+                </select>
+                <span class="text-danger" asp-validation-for="Gender"></span>
+            </div>
+
+        </div>
+        <div class="section-header mb-3 mt-4">
+            <h5 class="text-primary fw-bold">Address Information</h5>
+            <hr class="mt-2">
+        </div>
+        <div class="row g-3">
+
+            <div class="col-12 col-md-6">
+                <label   asp-for="BuildingNumber" class="form-label"></label>
+                <input asp-for="BuildingNumber" type="text" class="form-control" />
+                <span class="text-danger" asp-validation-for="BuildingNumber"></span>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label asp-for="Street" class="form-label"></label>
+                <input asp-for="Street" type="text" class="form-control" />
+                <span class="text-danger" asp-validation-for="Street"></span>
+            </div>
+            <div class="col-12 col-md-6">
+                <label asp-for="City" class="form-label"></label>
+                <input asp-for="City" type="text" class="form-control" />
+                <span class="text-danger" asp-validation-for="City"></span>
+
+            </div>
+        </div>
+        <!-- Professional Information -->
+        <div class="section-header mb-3">
+            <h5 class="text-primary fw-bold">Professional Information</h5>
+            <hr class="mt-2">
+        </div>
+        <div class="row g-3">
+            <div class="col-12">
+                <label class="form-label fw-semibold">
+                    Specializations <span class="text-danger">*</span>
+                </label>
+
+
+                @foreach (var specialty in Enum.GetValues(typeof(Specialties)))
+                {
+                    <div class="form-check">
+                        <input asp-for="Specialties" class="form-check-input" type="radio" value="@specialty" />
+                        <label asp-for="Specialties" class="form-check-label">@specialty</label>
+                    </div>
+                }
+                <span class="text-danger" asp-validation-for="Specialties" class="text-danger"></span>
+               
+            </div>
+        </div>
+
+        <footer class="d-flex justify-content-end mt-4">
+            <button type="submit" class="btn btn-fill">Add</button>
+        </footer>
+    </form>
+
+</div>
+@section Scripts 
+{
+    <partial name="_ValidationScriptsPartial" />
+}
+
+
+
+@* 
+
+<div class="form-check">
+    <input asp-for="Specialties" class="form-check-input" type="radio"
+           value="@Specialties.GenenralFitness" />
+    <label asp-for="Specialties" class="form-check-label">GeneralFitness</label>
+</div>
+<div class="form-check">
+    <input asp-for="Specialties" class="form-check-input" type="radio" value="@Specialties.Yoga" />
+    <label asp-for="Specialties" class="form-check-label">Yoga</label>
+</div>
+<div class="form-check">
+    <input asp-for="Specialties" class="form-check-input" type="radio" value="@Specialties.Boxing" />
+    <label asp-for="Specialties" class="form-check-label">Boxing</label>
+</div>
+<div class="form-check">
+    <input asp-for="Specialties" class="form-check-input" type="radio" value="@Specialties.Crossfit" />
+    <label asp-for="Specialties" class="form-check-label">CrossFit</label>
+    <span asp-validation-for="Specialties"></span>
+</div> *@
