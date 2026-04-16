@@ -2,11 +2,13 @@ using GymManagementBLL;
 using GymManagementBLL.Service.Classes;
 using GymManagementBLL.Service.Interfaces;
 using GymManagementDAL.Data.DataSeeding;
+using GymManagementDAL.Entities;
 using GymManagementDAL.Entities.Repositories.Classes;
 using GymManagementDAL.Entities.Repositories.Interfaces;
 using GymManagementDAL.UnitOfWork;
 using GymManegementDAL.Data.Context;
 using GymManegementDAL.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,7 +36,13 @@ namespace GymManegementPL
             builder.Services.AddScoped<IMemberService, MemberService>();
             builder.Services.AddScoped<ITrainerSarvice, TrainerSarvice >();
             builder.Services.AddScoped<IplanService, PlanService>();
-            builder.Services.AddScoped<ISessionService, SessionService>(); 
+            builder.Services.AddScoped<ISessionService, SessionService>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>( config => config.User.RequireUniqueEmail = true)
+                .AddEntityFrameworkStores<GymDbcontext>();
+            builder.Services.AddScoped<IAccountService, AccountService>(); 
+           
+           
+
 
 
 
@@ -49,12 +57,17 @@ namespace GymManegementPL
 
             #region  DataSeeding 
 
-           //using   var Scope = app.Services.CreateScope();
-            //var dbcontext = Scope.ServiceProvider.GetRequiredService<GymDbcontext>();
+            using var Scope = app.Services.CreateScope();
+            var dbcontext = Scope.ServiceProvider.GetRequiredService<GymDbcontext>();
+            var UserManger = Scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var RoleManger = Scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
 
 
-            //GymDbcontextSeeding.DataSeeded(dbcontext);
+
+            GymDbcontextSeeding.DataSeeded(dbcontext);
+
+            IdentityDbcontextSeeding.DataSeed(UserManger, RoleManger); 
 
 
             #endregion
@@ -74,13 +87,14 @@ namespace GymManegementPL
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
             //app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Login}/{id?}");
                
 
             app.Run();

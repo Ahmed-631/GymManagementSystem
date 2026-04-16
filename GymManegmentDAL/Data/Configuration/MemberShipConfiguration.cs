@@ -28,6 +28,8 @@ namespace GymManegementDAL.Data.Configuration
             builder.HasOne(sh => sh.Plan)
               .WithMany(m => m.PlanMembers)
               .HasForeignKey(sh => sh.PlanId);
+
+            builder.Ignore(x => x.Id); 
         }
     }
 }

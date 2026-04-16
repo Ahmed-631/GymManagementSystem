@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <!-- ^ Our main css file -->
     <link rel="stylesheet" href="~/css/style.css" />
-    <title>Power fitness | @currentController</title>
+    <title> Power fitness | @currentController</title>
 </head>
 <body>
   
@@ -43,12 +43,17 @@
                             <a class="nav-link   @(currentController == "Home" ? "active" : "")    px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page"
                               asp-controller="Home" asp-action="Index"  >Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link     @(currentController == "Member" ? "active" : "")    px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" asp-controller="Member" asp-action="Index">Members</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link      @(currentController == "Trainer" ? "active" : "")             px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" asp-controller="Trainer" asp-action="Index">Trainers</a>
-                        </li>
+                            @if (User.IsInRole("SupperAdmin"))
+                            {
+                            <li class="nav-item">
+                                <a class="nav-link     @(currentController == "Member" ? "active" : "")    px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" asp-controller="Member" asp-action="Index">Members</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link      @(currentController == "Trainer" ? "active" : "")             px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" asp-controller="Trainer" asp-action="Index">Trainers</a>
+                            </li>
+                                
+                            }
+                       
                         <li class="nav-item">
                             <a class="nav-link        @(currentController == "Session" ? "active" : "")         px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" asp-controller="Session" asp-action="Index" ">Sessions</a>
                         </li>
@@ -60,11 +65,14 @@
                                asp-controller="MemberShip" asp-action="Index"> </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link  px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" href="#">
-                                Sessions
-                                Schedule
-                            </a>
+                            <form asp-action="Logout" asp-controller="Account" method="post" class="d-inline">
+                                <button type="submit"
+                                        class="btn btn-link nav-link px-3 py-2 mx-2 fw-bolder fs-5 text-black-alternative">
+                                    Logout
+                                </button>
+                            </form>
                         </li>
+                     
                     </ul>
                 </div>
             </div>

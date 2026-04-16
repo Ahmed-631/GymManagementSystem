@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace GymManagementDAL.Data.DataSeeding
@@ -15,31 +16,43 @@ namespace GymManagementDAL.Data.DataSeeding
 
 
         public static bool DataSeeded(GymDbcontext dbcontext   ) 
-        {   
-            var HasPlans = dbcontext.Plans.Any();
-            var HasCategories = dbcontext.Categories.Any();
-
-            if (HasPlans && HasCategories) return false;
-
-
-            if (!HasPlans) 
-            
+        {
+            try
             {
-                var Plans = LoadDataFromJson<Plan>("Plans.json");
-                if (Plans.Any()) dbcontext.Plans.AddRange(Plans); 
-                    
-     
-            };
+                var HasPlans = dbcontext.Plans.Any();
+                var HasCategories = dbcontext.Categories.Any();
 
-            if (!HasCategories)
+                if (HasPlans && HasCategories) return false;
 
-            {
-                var Categoris = LoadDataFromJson<Category>("categories.json");
-                if (Categoris.Any()) dbcontext.Categories.AddRange(Categoris);
+
+                if (!HasPlans)
+
+                {
+                    var Plans = LoadDataFromJson<Plan>("Plans.json");
+                    if (Plans.Any()) dbcontext.Plans.AddRange(Plans);
+
+
+                }
+                ;
+
+                if (!HasCategories)
+
+                {
+                    var Categoris = LoadDataFromJson<Category>("categories.json");
+                    if (Categoris.Any()) dbcontext.Categories.AddRange(Categoris);
+
+                }
+
+                return dbcontext.SaveChanges() > 0;
 
             }
-
-            return dbcontext.SaveChanges() > 0; 
+            catch (Exception ex)
+            {
+                
+              Console.WriteLine(ex.Message);
+                return false;
+            }
+           
 
 
         }
@@ -54,6 +67,7 @@ namespace GymManagementDAL.Data.DataSeeding
             {
                 PropertyNameCaseInsensitive = true
             };
+            Options.Converters.Add(new JsonStringEnumConverter()); 
             return JsonSerializer.Deserialize<List<T>>(Data, Options) ?? new List<T>(); ; 
         
         }

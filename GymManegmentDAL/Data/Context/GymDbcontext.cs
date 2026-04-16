@@ -6,21 +6,41 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using GymManegementDAL.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using GymManagementDAL.Entities;
 
 namespace GymManegementDAL.Data.Context
 {
-    public class GymDbcontext : DbContext
+    public class GymDbcontext :IdentityDbContext<ApplicationUser>
     {
 
-        public GymDbcontext (DbContextOptions<GymDbcontext> options) : base(options)     { }
+        public GymDbcontext (DbContextOptions<GymDbcontext> options) : base(options) 
+        {
+        }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
         //    optionsBuilder.UseSqlServer("Server=.;Database=GymManagement;Trusted_Connection=True;TrustServerCertificate=True;");
         //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
+
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.Entity<ApplicationUser>(Eb =>
+            {
+                Eb.Property(x => x.FirstName)
+                  .HasColumnType("varchar")
+                  .HasMaxLength(50);
+                Eb.Property(x => x.LastName)
+                  .HasColumnType("varchar")
+                   .HasMaxLength(50);
+
+
+            }
+        
+
+             ); 
            
         }
 
